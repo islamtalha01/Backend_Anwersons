@@ -1,24 +1,23 @@
 from fastapi import FastAPI, Depends
+from app.api.api_v1.routers.users import users_router
 from starlette.requests import Request
 import uvicorn
 
-from app.api.api_v1.routers.flights import flight_router
-# from app.api.api_v1.routers.auth import auth_router
-# from app.api.api_v1.routers.settings import settings_router
-# from app.api.api_v1.routers.agents import agents_router
+
+from app.api.api_v1.routers.auth import auth_router
 
 
 from app.core import config
-# from app.db.session import SessionLocal
-# from app.core.auth import get_current_active_user
+from app.db.session import SessionLocal
+from app.core.auth import get_current_active_user
 from app import tasks
 from fastapi.middleware.cors import CORSMiddleware
 
 
-# from app.db.session import Base, engine
+from app.db.session import Base, engine
 
 
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title=config.PROJECT_NAME, docs_url="/api/docs", openapi_url="/api"
@@ -30,12 +29,12 @@ origins = [
 ]
 
 
-# @app.middleware("http")
-# async def db_session_middleware(request: Request, call_next):
-#     request.state.db = SessionLocal()
-#     response = await call_next(request)
-#     request.state.db.close()
-#     return response
+@app.middleware("http")
+async def db_session_middleware(request: Request, call_next):
+    request.state.db = SessionLocal()
+    response = await call_next(request)
+    request.state.db.close()
+    return response
 
 
 
@@ -61,13 +60,10 @@ async def example_task():
     return {"message": "success"}
 
 
-# Routers
-# app.include_router(
-#     users_router,
-#     prefix="/api/v1",
-#     tags=["users"],
-#     dependencies=[Depends(get_current_active_user)],
-# )   
-app.include_router(flight_router, prefix="/api", tags=["flight"])
-# app.include_router(settings_router, prefix="/api/v1", tags=["settings"])
-# app.include_router(agents_router, prefix="/api/v1", tags=["agents"])
+#Routers
+app.include_router(
+    users_router,
+    prefix="/api/v1",
+    tags=["users"],
+    dependencies=[Depends(get_current_active_user)],
+)   
