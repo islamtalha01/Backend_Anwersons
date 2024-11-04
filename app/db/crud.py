@@ -1,11 +1,14 @@
 from fastapi import HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 import typing as t
+import logging
 #from app.db.models import Setting
 from . import models, schemas
+from app.db.schemas import JobEdit
 from app.core.security import get_password_hash
 
-
+logger = logging.getLogger(__name__)
 # def get_user(db: Session, user_id: int):
 #     user = db.query(models.User).filter(models.User.id == user_id).first()
 #     if not user:
@@ -109,8 +112,6 @@ def create_job(db: Session, job: schemas.JobCreate) -> schemas.JobOut:
         slots_7=job.slots_7,
         poles=job.poles,
         pitch=job.pitch,
-        original=job.original,
-        modified=job.modified,
         core_length=job.core_length,
         core_ld_back_iron=job.core_ld_back_iron,
         total_coils=job.total_coils,
@@ -135,10 +136,18 @@ def create_job(db: Session, job: schemas.JobCreate) -> schemas.JobOut:
         rotor_slots=job.rotor_slots,
         slots_offset_angle=job.slots_offset_angle,
     )
-    db.add(db_job)
-    db.commit()
-    db.refresh(db_job)
-    return db_job
+    
+    try:
+        db.add(db_job)
+        db.commit()
+        db.refresh(db_job)
+        logger.info(f"Job created successfully: {db_job}")
+    except IntegrityError as e:
+        db.rollback()
+        logger.error(f"Error creating job: {e.orig}")
+        raise
+    
+    return schemas.JobOut.from_orm(db_job)  # Assuming you have a method for conversion
 
 def delete_job(db: Session, job_id: int) -> schemas.JobOut:
     job = get_job(db, job_id)

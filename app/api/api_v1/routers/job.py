@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends, Response
+from fastapi import HTTPException
 import typing as t
 
 from app.db.session import get_db
@@ -46,7 +47,10 @@ async def job_create(
     db=Depends(get_db),
 ):
     # Create a new job
-    return create_job(db, job)
+    try : 
+        return create_job(db, job)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @r.put(

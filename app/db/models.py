@@ -59,8 +59,6 @@ class Job(Base):
     slots_7 = Column(Integer)
     poles = Column(Integer)
     pitch = Column(String)
-    original = Column(String)
-    modified = Column(String)
     core_length = Column(Float)
     core_ld_back_iron = Column(Float)
     total_coils = Column(Integer)
