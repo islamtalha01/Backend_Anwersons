@@ -1,15 +1,15 @@
 from fastapi import FastAPI, Depends
-from app.api.api_v1.routers.users import users_router
+from app.api.api_v1.routers.job import job_router
 from starlette.requests import Request
 import uvicorn
 
 
-from app.api.api_v1.routers.auth import auth_router
+# from app.api.api_v1.routers.auth import auth_router
 
 
 from app.core import config
 from app.db.session import SessionLocal
-from app.core.auth import get_current_active_user
+# from app.core.auth import get_current_active_user
 from app import tasks
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -48,22 +48,30 @@ app.add_middleware(
 
 
 
-@app.get("/api/v1")
-async def root():
-    return {"message": "Hello World"}
+# @app.get("/api/v1")
+# async def root():
+#     return {"message": "Hello World"}
 
 
-@app.get("/api/v1/task")
-async def example_task():
-    celery_app.send_task("app.tasks.example_task", args=["Hello World"])
+# @app.get("/api/v1/task")
+# async def example_task():
+#     celery_app.send_task("app.tasks.example_task", args=["Hello World"])
 
-    return {"message": "success"}
+#     return {"message": "success"}
 
 
-#Routers
+# #Routers
+# app.include_router(
+#     users_router,
+#     prefix="/api/v1",
+#     tags=["users"],
+#     # dependencies=[Depends(get_current_active_user)],
+# )   
+
+
 app.include_router(
-    users_router,
-    prefix="/api/v1",
-    tags=["users"],
-    dependencies=[Depends(get_current_active_user)],
-)   
+    job_router,  # Include the job router here
+    prefix="/api/v1/jobs",  # Specify the prefix for job routes
+    tags=["jobs"],  # Add a tag for jobs
+    # dependencies=[Depends(get_current_active_user)],  # Ensure the user is authenticated
+)
