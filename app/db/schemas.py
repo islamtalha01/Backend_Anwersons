@@ -86,13 +86,13 @@ class Job(BaseModel):
     total_coils: Optional[int] = None
     total_sets: Optional[int] = None
     coil_per_set: Optional[int] = None
-    wire_size: Optional[str] = None
+    wire_size: Optional[float] = None
     no_of_wires_connection: Optional[int] = None
     jumper_wt_per_set: Optional[float] = None
     total_wire_wt: Optional[float] = None
     winding_type: Optional[str] = None
     lead_length: Optional[float] = None
-    lead_size: Optional[str] = None
+    lead_size: Optional[float] = None
     no_of_leads: Optional[int] = None
     lead_markings: Optional[str] = None
     bearing_de: Optional[str] = None
@@ -138,13 +138,13 @@ class JobBase(BaseModel):
     total_coils: Optional[int] = None
     total_sets: Optional[int] = None
     coil_per_set: Optional[int] = None
-    wire_size: Optional[str] = None
+    wire_size: Optional[float] = None
     no_of_wires_connection: Optional[int] = None
     jumper_wt_per_set: Optional[float] = None
     total_wire_wt: Optional[float] = None
     winding_type: Optional[str] = None
     lead_length: Optional[float] = None
-    lead_size: Optional[str] = None
+    lead_size: Optional[float] = None
     no_of_leads: Optional[int] = None
     lead_markings: Optional[str] = None
     bearing_de: Optional[str] = None
@@ -167,4 +167,5 @@ class JobOut(JobBase):
     id: int  # Assuming id is required for the output
 
     class Config:
-        orm_mode = True
+        orm_mode = True  # Allow Pydantic to parse ORM models
+        from_attributes = True  # Enable from_orm support
