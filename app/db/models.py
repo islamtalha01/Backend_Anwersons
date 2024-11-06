@@ -56,7 +56,7 @@ class Job(Base):
     ins_class = Column(String)
     duty = Column(String)
     winding_data = Column(String)
-    slots_7 = Column(Integer)
+    slots = Column(Integer)
     poles = Column(Integer)
     pitch = Column(String)
     core_length = Column(Float)

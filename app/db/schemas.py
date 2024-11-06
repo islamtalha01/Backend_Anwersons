@@ -47,9 +47,9 @@ from datetime import datetime, date
 #     permissions: str = "user"
 
 # Job Schemas
-# Job Schemas
-from pydantic import BaseModel
-from typing import Optional
+
+class Config:
+        arbitrary_types_allowed = True
 
 # Job Schemas
 class Job(BaseModel):
@@ -78,7 +78,7 @@ class Job(BaseModel):
     ins_class: Optional[str] = None
     duty: Optional[str] = None
     winding_data: Optional[str] = None
-    slots_7: Optional[int] = None
+    slots: Optional[int] = None
     poles: Optional[int] = None
     pitch: Optional[float] = None
     core_length: Optional[float] = None
@@ -130,7 +130,7 @@ class JobBase(BaseModel):
     ins_class: Optional[str] = None
     duty: Optional[str] = None
     winding_data: Optional[str] = None
-    slots_7: Optional[int] = None
+    slots: Optional[int] = None
     poles: Optional[int] = None
     pitch: Optional[float] = None
     core_length: Optional[float] = None

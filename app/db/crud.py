@@ -109,7 +109,7 @@ def create_job(db: Session, job: schemas.JobCreate) -> schemas.JobOut:
         ins_class=job.ins_class,
         duty=job.duty,
         winding_data=job.winding_data,
-        slots_7=job.slots_7,
+        slots=job.slots,
         poles=job.poles,
         pitch=job.pitch,
         core_length=job.core_length,
