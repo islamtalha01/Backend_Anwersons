@@ -78,6 +78,7 @@ async def update_project(project_id: int, project: ProjectCreate):
 
 @router.delete("/{project_id}")
 async def delete_project(project_id: int):
+    supabase.table("lists").delete().eq("project_id", project_id).execute()
     response = supabase.table("projects").delete().eq("id", project_id).execute()
     if response.data:
         return {"message": "Project deleted successfully"}

@@ -3,9 +3,10 @@ from typing import List
 from supabase import create_client
 import os
 from datetime import datetime, timezone
+from dotenv import load_dotenv
 from schemas.list_schemas import ListCreate, ListResponse, ListsResponse, ListReorderRequest
-
 router = APIRouter()
+load_dotenv()
 
 # Create Supabase client
 supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
@@ -77,7 +78,7 @@ async def update_list(list_id: str, list_data: ListCreate):
     if response.data:
         return response.data[0]
     else:
-        raise HTTPException(status_code=404, detail="List not found")
+        return []
 
 @router.delete("/{project_id}/lists/{list_id}")
 async def delete_list(list_id: str):

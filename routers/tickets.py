@@ -74,6 +74,7 @@ async def get_tickets_of_list(list_id: str, project_id: str):
     if response.data:
         return response.data
     else:
+        return []
         raise HTTPException(status_code=404, detail="Ticket not found")
 
 @router.put("/api/projects/{project_id}/lists/{list_id}/tickets/{ticket_id}", response_model=TicketResponse)
