@@ -29,8 +29,8 @@ class TicketResponse(BaseModel):
     due_date : Optional[datetime]
     labels : List[str]
     edit_mode : bool
-    created_at : str
-    updated_at : str
+    created_at : datetime
+    updated_at : datetime
     
 # class TicketMove(BaseModel):
 #     source_list_id: str

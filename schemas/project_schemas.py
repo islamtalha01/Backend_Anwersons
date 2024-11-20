@@ -1,6 +1,8 @@
 from typing import List, Optional
 from pydantic import BaseModel
 from schemas.ticket_schemas import TicketResponse
+from datetime import datetime
+
 
 class ProjectCreate(BaseModel):
     name: str
@@ -14,16 +16,16 @@ class ProjectResponse(BaseModel):
     name: str
     description: Optional[str]
     members: List[str]
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
     
 
 class ListWithTickets(BaseModel):
     id: int
     name: str
     project_id: int
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
     tickets: List[TicketResponse]  # List of tickets for the list
 
     class Config:
