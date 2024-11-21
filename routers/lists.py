@@ -3,7 +3,7 @@ from typing import List
 from supabase import create_client
 from sqlalchemy.orm import Session
 from database.db import get_db
-from database.models import List as ListModel, Project, Ticket
+from database.models import List as ListModel
 import os
 from datetime import datetime, timezone
 from dotenv import load_dotenv
