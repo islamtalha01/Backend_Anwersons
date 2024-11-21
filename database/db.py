@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import os
 
 # Database setup
-DATABASE_URL = os.getenv("HEROKU_POSTGRESQL_CHARCOAL_URL")  # Ensure this points to your local PostgreSQL database
+DATABASE_URL = os.getenv("DATABASE_URL")  # Ensure this points to your local PostgreSQL database
 print(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
