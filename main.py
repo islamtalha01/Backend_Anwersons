@@ -2,7 +2,7 @@ import os
 import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import lists, tickets, projects, attachments  # Import the new routers
+from routers import lists, tickets, projects, attachments, issues  # Import the new routers
 from database.db import engine
 from database.models import Base
 from fastapi.responses import RedirectResponse
@@ -44,3 +44,4 @@ app.include_router(tickets.router, prefix="", tags=["Tickets"])
 app.include_router(lists.router, prefix="/api/projects", tags=["Lists"])
 app.include_router(projects.router, prefix="/api/projects", tags=["Projects"])
 app.include_router(attachments.router, prefix="/api/attachments", tags=["attachments"])
+app.include_router(issues.router, prefix="/api/issues", tags=["issues"])

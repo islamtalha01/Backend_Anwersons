@@ -38,9 +38,11 @@ class Project(Base):
     members = Column(JSON, nullable=True)  # Store member usernames or IDs as a JSON array
     created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
     updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+    user_id = Column(Integer, nullable=False)
 
-    # One-to-many relationship with Ticket
+    # One-to-many relationship with Ticket and Issues
     tickets = relationship("Ticket", back_populates="project")
+    issues = relationship("Issue", back_populates="project")
 
 
 class Ticket(Base):
@@ -65,4 +67,29 @@ class Ticket(Base):
     project = relationship("Project", back_populates="tickets")
     
     
-    
+class SeverityEnum(enum.Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
+
+class Issue(Base):
+    __tablename__ = "issues"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)  # Issue title
+    description = Column(String, nullable=True)  # Detailed description of the issue
+    steps_to_reproduce = Column(String, nullable=True)  # Steps to reproduce the issue
+    expected_behaviour = Column(String, nullable=True)  # What was expected to happen
+    actual_behaviour = Column(String, nullable=True)  # What actually happened
+    severity = Column(Enum(SeverityEnum), nullable=False, default=SeverityEnum.medium)  # Severity level
+    issue_metadata = Column(JSON, nullable=True)  # Additional data stored as JSON
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)  # Foreign key to Project
+    image_id = Column(String, nullable=True)  # Reference to an image ID
+    image_url = Column(String, nullable=True)  # URL of the associated image
+    created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
+    updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+
+    # Relationship with Project
+    project = relationship("Project", back_populates="issues")
+
+

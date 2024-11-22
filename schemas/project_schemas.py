@@ -8,6 +8,7 @@ class ProjectCreate(BaseModel):
     name: str
     description: Optional[str] = None
     members: List[str] = ["admin"]  # Default to admin user
+    user_id: int
 
 
 

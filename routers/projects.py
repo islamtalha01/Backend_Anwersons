@@ -31,6 +31,7 @@ async def create_project(project: ProjectCreate, db: Session = Depends(get_db)):
             members=project.members,
             created_at=datetime.now(timezone.utc),
             updated_at=datetime.now(timezone.utc),
+            user_id = project.user_id
         )
 
         # Add the new project to the database
