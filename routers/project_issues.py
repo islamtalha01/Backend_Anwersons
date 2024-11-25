@@ -39,7 +39,8 @@ async def create_project_issue(project_issue: ProjectIssueCreate, db: Session = 
 async def get_all_project_issues(db: Session = Depends(get_db)):
     project_issues = db.query(ProjectIssue).all()
     if not project_issues:
-        raise HTTPException(status_code=404, detail="No project issues found")
+        # raise HTTPException(status_code=404, detail="No project issues found")
+        return {"project_issues": []}
     return project_issues
 
 

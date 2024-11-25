@@ -40,7 +40,8 @@ async def get_projects(db: Session = Depends(get_db), user_id: int = None):
     # Fetch all projects from the database
     projects = db.query(Project).filter(Project.user_id == user_id).all()
     if not projects:
-        raise HTTPException(status_code=404, detail="No projects found")
+        return []
+        # raise HTTPException(status_code=404, detail="No projects found")
     return projects
 
 
@@ -50,7 +51,8 @@ async def get_project_with_lists_and_tickets(project_id: int, db: Session = Depe
     # Fetch the project
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
+        # raise HTTPException(status_code=404, detail="Project not found")
+        return []
 
     # Fetch the lists associated with the project
     project_lists = db.query(ListModel).filter(ListModel.project_id == project_id).all()
@@ -85,7 +87,8 @@ async def update_project(project_id: int, project: ProjectCreate, db: Session = 
     db_project = db.query(Project).filter(Project.id == project_id).first()
 
     if not db_project:
-        raise HTTPException(status_code=404, detail="Project not found")
+        # raise HTTPException(status_code=404, detail="Project not found")
+        return []
 
     # Update the project fields
     db_project.name = project.name

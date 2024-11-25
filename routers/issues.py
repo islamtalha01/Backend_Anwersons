@@ -61,7 +61,8 @@ async def get_issues_for_project(project_issue_id: int, db: Session = Depends(ge
     # Fetch issues associated with the project
     issues = db.query(Issue).filter(Issue.project_issue_id == project_issue_id).all()
     if not issues:
-        raise HTTPException(status_code=404, detail="No issues found for the specified project")
+        # raise HTTPException(status_code=404, detail="No issues found for the specified project")
+        return []
 
     return issues
 
@@ -71,7 +72,8 @@ async def get_issues_for_project(project_issue_id: int, db: Session = Depends(ge
 async def get_issue(issue_id: int, db: Session = Depends(get_db)):
     issue = db.query(Issue).filter(Issue.id == issue_id).first()
     if not issue:
-        raise HTTPException(status_code=404, detail="Issue not found")
+        # raise HTTPException(status_code=404, detail="Issue not found")
+        return {}
     return issue
 
 
