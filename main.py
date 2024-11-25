@@ -47,3 +47,5 @@ app.include_router(attachments.router, prefix="/api/attachments", tags=["attachm
 app.include_router(project_issues.router, prefix="/api/project-issues", tags=["project-issues"])
 app.include_router(issues.router, prefix="/api/issues", tags=["issues"])
 
+#updated app version for heroku
+
