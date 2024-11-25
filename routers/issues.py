@@ -51,7 +51,7 @@ async def create_issue(issue: IssueCreate, db: Session = Depends(get_db)):
 
 
 # Get all issues for a project
-@router.get("/project/{project_issue_id}", response_model=List[IssueResponse])
+@router.get("/project-issue/{project_issue_id}", response_model=List[IssueResponse])
 async def get_issues_for_project(project_issue_id: int, db: Session = Depends(get_db)):
     # Validate project existence
     project = db.query(ProjectIssue).filter(ProjectIssue.id == project_issue_id).first()

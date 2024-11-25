@@ -43,13 +43,13 @@ async def get_all_project_issues(db: Session = Depends(get_db)):
     return project_issues
 
 
-# Get a single ProjectIssue by ID
-@router.get("/{project_issue_id}", response_model=ProjectIssueDetailResponse)
-async def get_ProjectIssue_issues(project_issue_id: int, db: Session = Depends(get_db)):
-    project_issue = db.query(ProjectIssue).filter(ProjectIssue.id == project_issue_id).first()
-    if not project_issue:
-        raise HTTPException(status_code=404, detail="Project issue not found")
-    return project_issue
+# # Get a single ProjectIssue by ID
+# @router.get("/{project_issue_id}", response_model=ProjectIssueDetailResponse)
+# async def get_ProjectIssue_issues(project_issue_id: int, db: Session = Depends(get_db)):
+#     project_issue = db.query(ProjectIssue).filter(ProjectIssue.id == project_issue_id).first()
+#     if not project_issue:
+#         raise HTTPException(status_code=404, detail="Project issue not found")
+#     return project_issue
 
 
 # Update a ProjectIssue
