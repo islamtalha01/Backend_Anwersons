@@ -3,27 +3,26 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime, timezone
 from database.db import get_db  # Database session dependency
-from database.models import Issue, Project  # Import the Issue and Project models
+from database.models import Issue, Project, ProjectIssue  # Import the Issue and Project models
 from schemas.issue_schemas import (
     IssueCreate,
     IssueUpdate,
     IssueResponse,
     IssueDetailResponse
 )  # Import schemas for the Issue model
-import json
 
 router = APIRouter()
+
+
 
 # Create a new issue
 @router.post("/", response_model=IssueResponse)
 async def create_issue(issue: IssueCreate, db: Session = Depends(get_db)):
     try:
         # Validate project existence
-        project = db.query(Project).filter(Project.id == issue.project_id).first()
+        project = db.query(ProjectIssue).filter(ProjectIssue.id == issue.project_issue_id).first()
         if not project:
             raise HTTPException(status_code=404, detail="Project not found")
-        print("Metadata: ",issue.issue_metadata )
-        print("Type of issue_metadata:", type(issue.issue_metadata))
 
         # Create a new Issue instance
         new_issue = Issue(
@@ -33,8 +32,8 @@ async def create_issue(issue: IssueCreate, db: Session = Depends(get_db)):
             expected_behaviour=issue.expected_behaviour,
             actual_behaviour=issue.actual_behaviour,
             severity=issue.severity,
-            metadata=json.dumps(issue.issue_metadata),
-            project_id=issue.project_id,
+            issue_metadata=issue.issue_metadata,
+            project_issue_id=issue.project_issue_id,
             image_id=issue.image_id,
             image_url=issue.image_url,
             created_at=datetime.now(timezone.utc),
@@ -48,20 +47,19 @@ async def create_issue(issue: IssueCreate, db: Session = Depends(get_db)):
 
         return new_issue
     except Exception as e:
-        print(e)  # Optional: Log the exception for debugging
-        raise HTTPException(status_code=500, detail="Error creating issue")
+        raise HTTPException(status_code=500, detail=f"Error creating issue: {str(e)}")
 
 
 # Get all issues for a project
-@router.get("/project/{project_id}", response_model=List[IssueResponse])
-async def get_issues_for_project(project_id: int, db: Session = Depends(get_db)):
+@router.get("/project/{project_issue_id}", response_model=List[IssueResponse])
+async def get_issues_for_project(project_issue_id: int, db: Session = Depends(get_db)):
     # Validate project existence
-    project = db.query(Project).filter(Project.id == project_id).first()
+    project = db.query(ProjectIssue).filter(ProjectIssue.id == project_issue_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
     # Fetch issues associated with the project
-    issues = db.query(Issue).filter(Issue.project_id == project_id).all()
+    issues = db.query(Issue).filter(Issue.project_issue_id == project_issue_id).all()
     if not issues:
         raise HTTPException(status_code=404, detail="No issues found for the specified project")
 
@@ -86,8 +84,10 @@ async def update_issue(issue_id: int, issue_update: IssueUpdate, db: Session = D
         raise HTTPException(status_code=404, detail="Issue not found")
 
     # Update issue fields
-    for field, value in issue_update.dict(exclude_unset=True).items():
+    for field, value in issue_update.model_dump(exclude_unset=True).items():
         setattr(db_issue, field, value)
+        print("Field: ", field)
+        print("Value: ", value)
     db_issue.updated_at = datetime.now(timezone.utc)
 
     try:
@@ -97,7 +97,7 @@ async def update_issue(issue_id: int, issue_update: IssueUpdate, db: Session = D
     except Exception as e:
         db.rollback()
         print(e)
-        raise HTTPException(status_code=500, detail="Error updating issue")
+        raise HTTPException(status_code=500, detail=f"Error updating issue: {str(e)}")
 
 
 # Delete an issue
@@ -114,4 +114,4 @@ async def delete_issue(issue_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         print(e)
-        raise HTTPException(status_code=500, detail="Error deleting issue")
+        raise HTTPException(status_code=500, detail=f"Error deleting issue: {str(e)}")

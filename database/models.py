@@ -42,7 +42,6 @@ class Project(Base):
 
     # One-to-many relationship with Ticket and Issues
     tickets = relationship("Ticket", back_populates="project")
-    issues = relationship("Issue", back_populates="project")
 
 
 class Ticket(Base):
@@ -66,7 +65,23 @@ class Ticket(Base):
     # Link to the project it belongs to
     project = relationship("Project", back_populates="tickets")
     
+
+
+
+class ProjectIssue(Base):
+    __tablename__ = "project_issues"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    website = Column(String, nullable=True)
+    created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
+    updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     
+    # Relationship with Issues
+    issues = relationship("Issue", back_populates="project_issue")
+
+
+
 class SeverityEnum(enum.Enum):
     low = "low"
     medium = "medium"
@@ -78,18 +93,18 @@ class Issue(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)  # Issue title
     description = Column(String, nullable=True)  # Detailed description of the issue
-    steps_to_reproduce = Column(String, nullable=True)  # Steps to reproduce the issue
+    steps_to_reproduce = Column(JSON, nullable=True)  # Steps to reproduce the issue
     expected_behaviour = Column(String, nullable=True)  # What was expected to happen
     actual_behaviour = Column(String, nullable=True)  # What actually happened
     severity = Column(Enum(SeverityEnum), nullable=False, default=SeverityEnum.medium)  # Severity level
     issue_metadata = Column(JSON, nullable=True)  # Additional data stored as JSON
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)  # Foreign key to Project
+    project_issue_id = Column(Integer, ForeignKey("project_issues.id"), nullable=False)
     image_id = Column(String, nullable=True)  # Reference to an image ID
     image_url = Column(String, nullable=True)  # URL of the associated image
     created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
     updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
-    # Relationship with Project
-    project = relationship("Project", back_populates="issues")
+    # Relationship with ProjectIssues
+    project_issue = relationship("ProjectIssue", back_populates="issues")
 
-
+    

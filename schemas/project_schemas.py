@@ -19,6 +19,7 @@ class ProjectResponse(BaseModel):
     members: List[str]
     created_at: datetime
     updated_at: datetime
+    user_id: int
     
 
 class ListWithTickets(BaseModel):

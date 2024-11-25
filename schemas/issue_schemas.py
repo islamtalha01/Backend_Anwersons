@@ -12,12 +12,12 @@ class SeverityEnum(str, Enum):
 class IssueBase(BaseModel):
     title: str
     description: Optional[str] = None
-    steps_to_reproduce: Optional[str] = None
+    steps_to_reproduce: Optional[list] = None
     expected_behaviour: Optional[str] = None
     actual_behaviour: Optional[str] = None
     severity: SeverityEnum
     issue_metadata: Optional[dict] = None
-    project_id: int
+    project_issue_id: int
     image_id: Optional[str] = None
     image_url: Optional[str] = None
 
