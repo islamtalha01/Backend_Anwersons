@@ -1,9 +1,4 @@
-# from fastapi import APIRouter, HTTPException
-# from typing import List
-# from supabase import create_client
-# import os
 from datetime import datetime, timezone
-
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from typing import List
@@ -40,7 +35,7 @@ async def create_project(project: ProjectCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Error creating project")
 
 
-@router.get("/{user_id}", response_model=List[ProjectResponse])
+@router.get("/user/{user_id}", response_model=List[ProjectResponse])
 async def get_projects(db: Session = Depends(get_db), user_id: int = None):
     # Fetch all projects from the database
     projects = db.query(Project).filter(Project.user_id == user_id).all()
@@ -59,7 +54,7 @@ async def get_project_with_lists_and_tickets(project_id: int, db: Session = Depe
 
     # Fetch the lists associated with the project
     project_lists = db.query(ListModel).filter(ListModel.project_id == project_id).all()
-
+    print(project_lists)
     # Fetch tickets for each list and map them to their respective lists
     lists_with_tickets = []
     for list_item in project_lists:
