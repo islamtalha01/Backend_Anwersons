@@ -94,8 +94,10 @@ async def get_tickets_of_list(
     db: Session = Depends(get_db)
 ):
     # Validate project and list exist
-    await project_exists(project_id, db)
-    await list_exists(list_id, project_id, db)
+    if db.query(Project).filter(Project.id == project_id).first() is None:
+        return []
+    if db.query(ListModel).filter(ListModel.id == list_id, ListModel.project_id == project_id).first() is None:
+        return []
 
     # Fetch tickets for the specified list
     tickets = db.query(Ticket).filter(Ticket.list_id == list_id, Ticket.project_id == project_id).all()

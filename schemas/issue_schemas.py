@@ -39,5 +39,5 @@ class IssueResponse(IssueBase):
         orm_mode = True
 
 
-class IssueDetailResponse(IssueResponse):
-    pass
+class IssueDetailResponse(BaseModel):
+    issue: Optional[IssueResponse]

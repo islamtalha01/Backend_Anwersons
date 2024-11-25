@@ -56,7 +56,8 @@ async def get_issues_for_project(project_issue_id: int, db: Session = Depends(ge
     # Validate project existence
     project = db.query(ProjectIssue).filter(ProjectIssue.id == project_issue_id).first()
     if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
+        # raise HTTPException(status_code=404, detail="Project not found")
+        return []
 
     # Fetch issues associated with the project
     issues = db.query(Issue).filter(Issue.project_issue_id == project_issue_id).all()
@@ -71,10 +72,13 @@ async def get_issues_for_project(project_issue_id: int, db: Session = Depends(ge
 @router.get("/{issue_id}", response_model=IssueDetailResponse)
 async def get_issue(issue_id: int, db: Session = Depends(get_db)):
     issue = db.query(Issue).filter(Issue.id == issue_id).first()
-    if not issue:
+    print ("Issue: ", issue)
+    if issue is None:
+        print("Issue not found")
         # raise HTTPException(status_code=404, detail="Issue not found")
-        return {}
-    return issue
+        return {"issue": None}
+    return {"issue":issue}
+
 
 
 # Update an issue
