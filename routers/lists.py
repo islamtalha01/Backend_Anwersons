@@ -7,6 +7,7 @@ import os
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 from schemas.list_schemas import ListCreate, ListResponse, ListsResponse, ListReorderRequest
+from database.models import Ticket
 
 router = APIRouter()
 load_dotenv()
@@ -94,6 +95,8 @@ async def delete_list(project_id: int, list_id: int, db: Session = Depends(get_d
         raise HTTPException(status_code=404, detail="List not found")
 
     try:
+        # Delete all tickets associated with the list
+        db.query(Ticket).filter(Ticket.list_id == list_id).delete()
         # Delete the list from the database
         db.delete(db_list)
         db.commit()

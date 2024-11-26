@@ -110,8 +110,11 @@ async def update_project(project_id: int, project: ProjectCreate, db: Session = 
 
 @router.delete("/{project_id}")
 async def delete_project(project_id: int, db: Session = Depends(get_db)):
+    
+    # Delete related tickets first
+    db.query(Ticket).filter(Ticket.project_id == project_id).delete()
     # Delete related lists first
-    lists_deleted = db.query(ListModel).filter(ListModel.project_id == project_id).delete()
+    db.query(ListModel).filter(ListModel.project_id == project_id).delete()
     db.commit()  # Commit deletion of related lists
 
     # Delete the project
