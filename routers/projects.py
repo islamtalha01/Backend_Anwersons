@@ -36,7 +36,7 @@ async def create_project(project: ProjectCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/user/{user_id}", response_model=List[ProjectResponse])
-async def get_projects(db: Session = Depends(get_db), user_id: int = None):
+async def get_projects(db: Session = Depends(get_db), user_id: str = None):
     # Fetch all projects from the database
     projects = db.query(Project).filter(Project.user_id == user_id).all()
     if not projects:
