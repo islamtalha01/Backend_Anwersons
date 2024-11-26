@@ -8,7 +8,7 @@ class ProjectCreate(BaseModel):
     name: str
     description: Optional[str] = None
     members: List[str] = ["admin"]  # Default to admin user
-    user_id: int
+    user_id: str
 
 
 
@@ -19,7 +19,7 @@ class ProjectResponse(BaseModel):
     members: List[str]
     created_at: datetime
     updated_at: datetime
-    user_id: int
+    user_id: str
     
 
 class ListWithTickets(BaseModel):

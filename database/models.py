@@ -38,7 +38,7 @@ class Project(Base):
     members = Column(JSON, nullable=True)  # Store member usernames or IDs as a JSON array
     created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
     updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
-    user_id = Column(Integer, nullable=False)
+    user_id = Column(String, nullable=False)
 
     # One-to-many relationship with Ticket and Issues
     tickets = relationship("Ticket", back_populates="project")
