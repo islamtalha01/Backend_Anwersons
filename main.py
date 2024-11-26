@@ -55,7 +55,7 @@ def valid_url(url: str = Query(...)):
 @app.get("/proxy-url")
 async def proxy_request(
     url: str = Depends(valid_url),
-    response_type: str = Query("text", enum=["text", "blob"]),
+    response_type: str = Query("blob", enum=["text", "blob"]),
 ):
     """
     Proxy endpoint to fetch data from the specified URL.
