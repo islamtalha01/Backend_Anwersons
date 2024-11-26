@@ -11,6 +11,7 @@ from schemas.project_issue_schemas import (
     ProjectIssueResponse,
     ProjectIssueDetailResponse,
 )
+from database.models import Issue  # SQLAlchemy model
 
 router = APIRouter()
 
@@ -71,15 +72,21 @@ async def update_project_issue(
 # Delete a ProjectIssue
 @router.delete("/{project_issue_id}")
 async def delete_project_issue(project_issue_id: int, db: Session = Depends(get_db)):
+    # Check if the ProjectIssue exists
     project_issue = db.query(ProjectIssue).filter(ProjectIssue.id == project_issue_id).first()
     if not project_issue:
         raise HTTPException(status_code=404, detail="Project issue not found")
 
     try:
+        # Delete all related issues
+        db.query(Issue).filter(Issue.project_issue_id == project_issue_id).delete(synchronize_session=False)
+
+        # Delete the ProjectIssue
         db.delete(project_issue)
         db.commit()
-        return {"message": "Project issue deleted successfully"}
+
+        return {"message": "Project issue and its related issues deleted successfully"}
     except Exception as e:
-        db.rollback()
-        print(e)
+        db.rollback()  # Rollback changes in case of an error
+        print(e)  # Log the exception for debugging
         raise HTTPException(status_code=500, detail="Error deleting project issue")

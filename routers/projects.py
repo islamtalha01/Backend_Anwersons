@@ -108,7 +108,6 @@ async def update_project(project_id: int, project: ProjectCreate, db: Session = 
         raise HTTPException(status_code=500, detail="Error updating project")
 
 
-
 @router.delete("/{project_id}")
 async def delete_project(project_id: int, db: Session = Depends(get_db)):
     # Delete related lists first
