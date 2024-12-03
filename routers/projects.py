@@ -35,15 +35,24 @@ async def create_project(project: ProjectCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Error creating project")
 
 
+@router.get("/", response_model=List[ProjectResponse])
+async def get_all_projects(db: Session = Depends(get_db)):
+    # Fetch all projects from the database
+    projects = db.query(Project).all()
+    if not projects:
+        return []
+        # raise HTTPException(status_code=404, detail="No projects found")
+    return projects
+
+
 @router.get("/user/{user_id}", response_model=List[ProjectResponse])
-async def get_projects(db: Session = Depends(get_db), user_id: str = None):
+async def get_user_projects(db: Session = Depends(get_db), user_id: str = None):
     # Fetch all projects from the database
     projects = db.query(Project).filter(Project.user_id == user_id).all()
     if not projects:
         return []
         # raise HTTPException(status_code=404, detail="No projects found")
     return projects
-
 
 
 @router.get("/{project_id}", response_model=ProjectDetailResponse)
