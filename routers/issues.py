@@ -26,13 +26,13 @@ async def create_issue(issue: IssueCreate, db: Session = Depends(get_db)):
 
         # Create a new Issue instance
         new_issue = Issue(
-            title=issue.title,
+            # title=issue.title,
             description=issue.description,
-            steps_to_reproduce=issue.steps_to_reproduce,
-            expected_behaviour=issue.expected_behaviour,
-            actual_behaviour=issue.actual_behaviour,
-            severity=issue.severity,
-            issue_metadata=issue.issue_metadata,
+            # steps_to_reproduce=issue.steps_to_reproduce,
+            # expected_behaviour=issue.expected_behaviour,
+            # actual_behaviour=issue.actual_behaviour,
+            # severity=issue.severity,
+            # issue_metadata=issue.issue_metadata,
             project_issue_id=issue.project_issue_id,
             image_id=issue.image_id,
             image_url=issue.image_url,
@@ -47,7 +47,7 @@ async def create_issue(issue: IssueCreate, db: Session = Depends(get_db)):
 
         return new_issue
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error creating issue: {str(e)}")
+        raise HTTPException(status_code=404, detail=f"Error creating issue: {str(e)}")
 
 
 # Get all issues for a project

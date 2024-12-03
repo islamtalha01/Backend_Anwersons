@@ -91,13 +91,13 @@ class Issue(Base):
     __tablename__ = "issues"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)  # Issue title
+    # title = Column(String, nullable=False)  # Issue title 
     description = Column(String, nullable=True)  # Detailed description of the issue
-    steps_to_reproduce = Column(JSON, nullable=True)  # Steps to reproduce the issue
-    expected_behaviour = Column(String, nullable=True)  # What was expected to happen
-    actual_behaviour = Column(String, nullable=True)  # What actually happened
-    severity = Column(Enum(SeverityEnum), nullable=False, default=SeverityEnum.medium)  # Severity level
-    issue_metadata = Column(JSON, nullable=True)  # Additional data stored as JSON
+    # steps_to_reproduce = Column(JSON, nullable=True)  # Steps to reproduce the issue
+    # expected_behaviour = Column(String, nullable=True)  # What was expected to happen
+    # actual_behaviour = Column(String, nullable=True)  # What actually happened
+    # severity = Column(Enum(SeverityEnum), nullable=False, default=SeverityEnum.medium)  # Severity level
+    # issue_metadata = Column(JSON, nullable=True)  # Additional data stored as JSON
     project_issue_id = Column(Integer, ForeignKey("project_issues.id"), nullable=False)
     image_id = Column(String, nullable=True)  # Reference to an image ID
     image_url = Column(String, nullable=True)  # URL of the associated image
@@ -106,5 +106,6 @@ class Issue(Base):
 
     # Relationship with ProjectIssues
     project_issue = relationship("ProjectIssue", back_populates="issues")
+    
 
     

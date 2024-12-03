@@ -10,13 +10,7 @@ class SeverityEnum(str, Enum):
 
 
 class IssueBase(BaseModel):
-    title: str
     description: Optional[str] = None
-    steps_to_reproduce: Optional[list] = None
-    expected_behaviour: Optional[str] = None
-    actual_behaviour: Optional[str] = None
-    severity: SeverityEnum
-    issue_metadata: Optional[dict] = None
     project_issue_id: int
     image_id: Optional[str] = None
     image_url: Optional[str] = None
@@ -24,7 +18,6 @@ class IssueBase(BaseModel):
 
 class IssueCreate(IssueBase):
     pass
-
 
 class IssueUpdate(IssueBase):
     title: Optional[str] = None  # All fields optional for partial updates
