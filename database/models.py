@@ -18,7 +18,7 @@ class Job(Base):
 
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, nullable=True)  # Changed from Date to String
+    date = Column(TIMESTAMP, default=datetime.now(timezone.utc))
     name  = Column(String, nullable=True)
     description  = Column(String, nullable=True)
 

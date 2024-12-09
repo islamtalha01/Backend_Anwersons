@@ -4,7 +4,7 @@
 from pydantic import BaseModel
 import typing as t
 from typing import Optional
-from datetime import datetime, date
+from datetime import datetime
 
 
 
@@ -68,7 +68,7 @@ class Config:
 
 class Job(BaseModel):
      
-    date:Optional[str] = None # Changed from Date to String
+    date:datetime # Changed from Date to String
     name : Optional[str] = None
     description:Optional[str] = None
 
