@@ -1,111 +1,89 @@
 from sqlalchemy import (
-    Column, Integer, String, ForeignKey, TIMESTAMP, Boolean, Enum, JSON
+    Column, Integer, String, Float, TIMESTAMP, Boolean, Enum, JSON
 )
-from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime, timezone
-import enum
 
 Base = declarative_base()
 
-class StatusEnum(enum.Enum):
-    new = "new"
-    pending = "pending"
-    completed = "completed"
 
-class PriorityEnum(enum.Enum):
-    low = "low"
-    medium = "medium"
-    high = "high"
 
-class List(Base):
-    __tablename__ = "lists"
+
+
+
+
+
+class Job(Base):
+    __tablename__ = "job"
+
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    position = Column(Integer, nullable=True)  # Represents the position of the list in the UI
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
-    created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
-    updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+    date = Column(String, nullable=True)  # Changed from Date to String
+    name  = Column(String, nullable=True)
+    description  = Column(String, nullable=True)
 
 
-class Project(Base):
-    __tablename__ = "projects"
+    # id = Column(Integer, primary_key=True, index=True)
+    # date = Column(TIMESTAMP, default=datetime.now(timezone.utc))  # Changed from Date to String
+    # client_job_no = Column(String, nullable=True)
+    # client_asset_location = Column(String, nullable=True)
+    # previous_job_no = Column(String, nullable=True)
+    # date_received = Column(String, nullable=True)  # Changed from Date to String
+    # make = Column(String, nullable=True)
+    # type = Column(String, nullable=True)
+    # site = Column(String, nullable=True)
+    # job_no = Column(String, nullable=True)
+    # client = Column(String, nullable=True)
+    # client_ton_kks_ass_no = Column(String, nullable=True)
+    # date_delivered = Column(String, nullable=True)  # Changed from Date to String
+    # frame_no = Column(String, nullable=True)
+    # ser_no = Column(String, nullable=True)
+    # hp = Column(Float, nullable=True)
+    # kw = Column(Float, nullable=True)
+    # rpm = Column(Float, nullable=True)
+    # phase = Column(Integer, nullable=True)
+    # volts = Column(Float, nullable=True)
+    # amps = Column(Float, nullable=True)
+    # hertz = Column(Float, nullable=True)
+    # ins_class = Column(String, nullable=True)
+    # duty = Column(String, nullable=True)
+    # winding_data = Column(String, nullable=True)
+    # slots = Column(Integer, nullable=True)
+    # poles = Column(Integer, nullable=True)
+    # pitch = Column(String, nullable=True)
+    # core_length = Column(Float, nullable=True)
+    # core_ld_back_iron = Column(Float, nullable=True)
+    # total_coils = Column(Integer, nullable=True)
+    # total_sets = Column(Integer, nullable=True)
+    # coil_per_set = Column(Integer, nullable=True)
+    # wire_size = Column(Float, nullable=True)
+    # no_of_wires_connection = Column(Integer, nullable=True)
+    # jumper_wt_per_set = Column(Float, nullable=True)
+    # total_wire_wt = Column(Float, nullable=True)
+    # winding_type = Column(String, nullable=True)
+    # lead_length = Column(Float, nullable=True)
+    # lead_size = Column(Float, nullable=True)
+    # no_of_leads = Column(Integer, nullable=True)
+    # lead_markings = Column(String, nullable=True)
+    # bearing_de = Column(String, nullable=True)
+    # bearing_nde = Column(String, nullable=True)
+    # shaft_dia = Column(Float, nullable=True)
+    # slot_depth = Column(Float, nullable=True)
+    # tooth_width = Column(Float, nullable=True)
+    # rotor_dia = Column(Float, nullable=True)
+    # calculated_gap = Column(Float, nullable=True)
+    # rotor_slots = Column(Integer, nullable=True)
+    # slots_offset_angle = Column(Float, nullable=True)
+    # created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
+    # updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    description = Column(String, nullable=True)
-    members = Column(JSON, nullable=True)  # Store member usernames or IDs as a JSON array
-    created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
-    updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
-    user_id = Column(String, nullable=False)
-
-    # One-to-many relationship with Ticket and Issues
-    tickets = relationship("Ticket", back_populates="project")
-
-
-class Ticket(Base):
-    __tablename__ = "tickets"
-
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=True)
-    position = Column(Integer, nullable=False)  # Represents the position of the ticket in its list
-    list_id = Column(Integer, ForeignKey("lists.id"), nullable=False)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
-    assignee = Column(String, nullable=True)  # The user assigned to the ticket
-    priority = Column(Enum(PriorityEnum), nullable=True, default=PriorityEnum.medium)
-    status = Column(Enum(StatusEnum), nullable=False, default=StatusEnum.new)
-    due_date = Column(TIMESTAMP, nullable=True)
-    labels = Column(JSON, nullable=True)  # Store labels as an array of strings in JSON
-    edit_mode = Column(Boolean, default=False)
-    created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
-    updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
-
-    # Link to the project it belongs to
-    project = relationship("Project", back_populates="tickets")
-    
 
 
 
-class ProjectIssue(Base):
-    __tablename__ = "project_issues"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    website = Column(String, nullable=True)
-    created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
-    updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
-    
-    # Relationship with Issues
-    issues = relationship("Issue", back_populates="project_issue")
 
 
 
-class SeverityEnum(enum.Enum):
-    low = "low"
-    medium = "medium"
-    high = "high"
 
-class Issue(Base):
-    __tablename__ = "issues"
 
-    id = Column(Integer, primary_key=True, index=True)
-    # title = Column(String, nullable=False)  # Issue title 
-    description = Column(String, nullable=True)  # Detailed description of the issue
-    # steps_to_reproduce = Column(JSON, nullable=True)  # Steps to reproduce the issue
-    # expected_behaviour = Column(String, nullable=True)  # What was expected to happen
-    # actual_behaviour = Column(String, nullable=True)  # What actually happened
-    # severity = Column(Enum(SeverityEnum), nullable=False, default=SeverityEnum.medium)  # Severity level
-    # issue_metadata = Column(JSON, nullable=True)  # Additional data stored as JSON
-    project_issue_id = Column(Integer, ForeignKey("project_issues.id"), nullable=False)
-    image_id = Column(String, nullable=True)  # Reference to an image ID
-    image_url = Column(String, nullable=True)  # URL of the associated image
-    created_at = Column(TIMESTAMP, default=datetime.now(timezone.utc))
-    updated_at = Column(TIMESTAMP, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
-    # Relationship with ProjectIssues
-    project_issue = relationship("ProjectIssue", back_populates="issues")
-    
 
-    
